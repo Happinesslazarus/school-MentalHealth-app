@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Mental Health Toolkit</h1>
+    </header>
+
+    <main>
+        <!-- Mood Tracker -->
+        <section id="mood-tracker">
+            <h2>Mood Tracker</h2>
+            <label for="mood">How are you feeling today?</label>
+            <select id="mood">
+                <option value="happy">Happy</option>
+                <option value="sad">Sad</option>
+                <option value="anxious">Anxious</option>
+                <option value="neutral">Neutral</option>
+            </select>
+            <button onclick="trackMood()">Track Mood</button>
+            <div id="mood-log"></div>
+        </section>
+
+        <!-- Breathing Exercise -->
+        <section id="breathing-exercise">
+            <h2>Guided Breathing Exercise</h2>
+            <button onclick="startBreathingExercise()">Start Breathing Exercise</button>
+            <div id="breathing-instructions"></div>
+        </section>
+
+        <!-- CBT Thought Journal -->
+        <section id="thought-journal">
+            <h2>CBT Thought Journal</h2>
+            <textarea id="thought" placeholder="Log your negative thought"></textarea>
+            <button onclick="logThought()">Log Thought</button>
+            <div id="thought-log"></div>
+        </section>
+
+        <!-- Self-Care Routine Generator -->
+        <section id="self-care">
+            <h2>Self-Care Routine Generator</h2>
+            <button onclick="generateSelfCare()">Generate Routine</button>
+            <div id="self-care-routine"></div>
+        </section>
+
+        <!-- Positive Affirmation -->
+        <section id="positive-affirmation">
+            <h2>Positive Affirmation Generator</h2>
+            <button onclick="generateAffirmation()">Get Affirmation</button>
+            <div id="affirmation"></div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

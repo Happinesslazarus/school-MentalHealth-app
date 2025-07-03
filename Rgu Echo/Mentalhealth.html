@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell: Comprehensive Mental Health Assessment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #4a4a4a;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #3498db;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        #result {
+            font-size: 1.1em;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            display: none;
+            text-align: left;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            width: 0;
+            height: 100%;
+            background-color: #2ecc71;
+            transition: width 0.5s ease-in-out;
+        }
+        .helplines {
+            margin-top: 20px;
+            border-top: 1px solid #bdc3c7;
+            padding-top: 20px;
+        }
+        .helpline {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MindWell: Comprehensive Mental Health Assessment</h1>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div id="question-container">
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const mentalHealthConditions = [
+            "Depression", "Anxiety", "Bipolar Disorder", "PTSD", "OCD",
+            "Eating Disorders", "ADHD", "Schizophrenia", "Social Anxiety",
+            "Panic Disorder", "Generalized Anxiety Disorder", "Phobias",
+            "Borderline Personality Disorder", "Substance Use Disorder",
+            "Insomnia", "Body Dysmorphic Disorder", "Autism Spectrum Disorder",
+            "Dissociative Identity Disorder", "Agoraphobia", "Trichotillomania"
+        ];
+
+        const questions = [
+            {
+                text: "How often do you feel sad or down?",
+                relevance: ["Depression", "Bipolar Disorder"]
+            },
+            {
+                text: "Do you experience sudden episodes of intense fear or discomfort?",
+                relevance: ["Anxiety", "Panic Disorder"]
+            },
+            {
+                text: "How often do you have trouble falling or staying asleep?",
+                relevance: ["Insomnia", "Depression", "Anxiety"]
+            },
+            {
+                text: "Do you have recurring thoughts that cause anxiety?",
+                relevance: ["OCD", "Generalized Anxiety Disorder"]
+            },
+            {
+                text: "How often do you feel restless or have trouble sitting still?",
+                relevance: ["ADHD", "Anxiety"]
+            },
+            {
+                text: "Do you experience flashbacks or nightmares related to a traumatic event?",
+                relevance: ["PTSD"]
+            },
+            {
+                text: "How often do you feel extremely energetic or elated for several days?",
+                relevance: ["Bipolar Disorder"]
+            },
+            {
+                text: "Do you often avoid social situations due to fear of embarrassment?",
+                relevance: ["Social Anxiety", "Agoraphobia"]
+            },
+            {
+                text: "How often do you have difficulty concentrating or focusing on tasks?",
+                relevance: ["ADHD", "Depression", "Anxiety"]
+            },
+            {
+                text: "Do you hear voices or see things that others don't?",
+                relevance: ["Schizophrenia"]
+            },
+            {
+                text: "How preoccupied are you with your body image?",
+                relevance: ["Eating Disorders", "Body Dysmorphic Disorder"]
+            },
+            {
+                text: "Do you experience intense mood swings or difficulty regulating emotions?",
+                relevance: ["Borderline Personality Disorder", "Bipolar Disorder"]
+            },
+            {
+                text: "How often do you use substances (alcohol, drugs) to cope with emotions?",
+                relevance: ["Substance Use Disorder"]
+            },
+            {
+                text: "Do you have an intense fear of a specific object or situation?",
+                relevance: ["Phobias"]
+            },
+            {
+                text: "How often do you feel detached from yourself or your surroundings?",
+                relevance: ["Dissociative Identity Disorder", "PTSD"]
+            },
+            {
+                text: "Do you have difficulties with social communication and interaction?",
+                relevance: ["Autism Spectrum Disorder"]
+            },
+            {
+                text: "How often do you engage in repetitive behaviors like hair pulling?",
+                relevance: ["Trichotillomania", "OCD"]
+            },
+            {
+                text: "Do you often feel overwhelmed by sensory input (lights, sounds, textures)?",
+                relevance: ["Autism Spectrum Disorder", "Anxiety"]
+            },
+            {
+                text: "How often do you experience panic attacks?",
+                relevance: ["Panic Disorder", "Anxiety"]
+            },
+            {
+                text: "Do you have persistent worries about various aspects of your life?",
+                relevance: ["Generalized Anxiety Disorder"]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+
+        const questionContainer = document.getElementById('question-container');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const resultElement = document.getElementById('result');
+        const progressElement = document.getElementById('progress');
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.text;
+            optionsElement.innerHTML = '';
+            const options = ["Never", "Rarely", "Sometimes", "Often", "Always"];
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.addEventListener('click', () => selectAnswer(index));
+                optionsElement.appendChild(button);
+            });
+            updateProgress();
+        }
+
+        function selectAnswer(index) {
+            answers.push(index);
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                displayQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            progressElement.style.width = `${progress}%`;
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            resultElement.style.display = 'block';
+
+            let conditionScores = {};
+            mentalHealthConditions.forEach(condition => {
+                conditionScores[condition] = 0;
+            });
+
+            questions.forEach((question, index) => {
+                const score = answers[index];
+                question.relevance.forEach(condition => {
+                    conditionScores[condition] += score;
+                });
+            });
+
+            let highScoreConditions = Object.entries(conditionScores)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .filter(([_, score]) => score > questions.length * 2);
+
+            let resultHTML = "<h2>Assessment Results</h2>";
+
+            if (highScoreConditions.length > 0) {
+                resultHTML += "<p>Based on your responses, you may be experiencing symptoms associated with:</p><ul>";
+                highScoreConditions.forEach(([condition, _]) => {
+                    resultHTML += `<li>${condition}</li>`;
+                });
+                resultHTML += "</ul>";
+                resultHTML += "<p>Please note that this assessment is not a diagnosis. If you're concerned about your mental health, it's important to consult with a qualified mental health professional for a proper evaluation and personalized advice.</p>";
+            } else {
+                resultHTML += "<p>Based on your responses, you don't seem to be experiencing significant symptoms associated with the conditions we screened for. However, if you have any concerns about your mental health, it's always a good idea to speak with a mental health professional.</p>";
+            }
+
+            resultHTML += "<h3>General Mental Health Tips:</h3><ul>";
+            resultHTML += "<li>Practice self-care and maintain a healthy lifestyle</li>";
+            resultHTML += "<li>Engage in regular physical exercise</li>";
+            resultHTML += "<li>Maintain a consistent sleep schedule</li>";
+            resultHTML += "<li>Practice stress-reduction techniques like meditation or deep breathing</li>";
+            resultHTML += "<li>Stay connected with supportive friends and family</li>";
+            resultHTML += "<li>Limit alcohol and avoid recreational drugs</li>";
+            resultHTML += "<li>Seek professional help if symptoms persist or worsen</li>";
+            resultHTML += "</ul>";
+
+            resultHTML += `<div class="helplines">
+                <h3>Mental Health Helplines:</h3>
+                <div class="helpline"><strong>National Suicide Prevention Lifeline:</strong> 1-800-273-8255</div>
+                <div class="helpline"><strong>Crisis Text Line:</strong> Text HOME to 741741</div>
+                <div class="helpline"><strong>SAMHSA National Helpline:</strong> 1-800-662-4357</div>
+                <div class="helpline"><strong>National Alliance on Mental Illness (NAMI) Helpline:</strong> 1-800-950-6264</div>
+            </div>`;
+
+            resultHTML += '<button onclick="location.reload()">Take the test again</button>';
+
+            resultElement.innerHTML = resultHTML;
+        }
+
+        displayQuestion();
+    </script>
+</body>
+</html>
